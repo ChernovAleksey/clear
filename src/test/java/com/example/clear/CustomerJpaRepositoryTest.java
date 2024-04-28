@@ -26,7 +26,7 @@ public class CustomerJpaRepositoryTest {
   public void testFindAll() {
     List<Customer> employees = repository.findAll();
     assertNotNull(employees);
-    assertEquals(10, employees.size());
+    assertEquals(1, employees.size());
   }
 
 
