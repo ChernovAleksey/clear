@@ -1,0 +1,47 @@
+server:
+ port: 9000
+ error:
+  path: /error
+
+ h2:
+  console:
+   enabled: true
+   settings:
+    trace: false
+
+
+
+
+ main:
+  allow-circular-references: true
+  allow-bean-definition-overriding: true
+---
+
+spring:
+ profiles:
+  active: local
+
+
+---
+spring:
+ sql:
+  init:
+   mode: always
+   data-locations: classpath:data-h2.sql
+   schema-locations: classpath:schema-h2.sql
+ datasource:
+  url: jdbc:h2:mem:testdb
+  username: sa
+  password:
+  driver-class-name: org.h2.Driver
+ jpa:
+  defer-datasource-initialization: true
+  hibernate:
+   id:
+    new_generator_mappings: true
+   ddl-auto: none
+ config:
+  activate:
+   on-profile: local
+
+
