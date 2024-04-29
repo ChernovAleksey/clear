@@ -1,4 +1,4 @@
-package com.example.clear;
+package com.example.clear.exeptionHandlers;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;

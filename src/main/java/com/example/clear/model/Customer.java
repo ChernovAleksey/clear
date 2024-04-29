@@ -2,6 +2,7 @@ package com.example.clear.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,8 +17,6 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @ToString
-//@EqualsAndHashCode(of={"id"})
-
 public class Customer extends AbstractEntity {
     @Column(name = "name")
     private String name;

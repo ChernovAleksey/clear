@@ -11,8 +11,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 
-import static com.example.clear.PropSource.AGE;
-
 @SpringBootApplication
 @RequiredArgsConstructor
 public class ClearApplication implements ApplicationRunner {

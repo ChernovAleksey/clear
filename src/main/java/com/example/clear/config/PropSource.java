@@ -1,4 +1,4 @@
-package com.example.clear;
+package com.example.clear.config;
 
 
 import org.springframework.beans.factory.annotation.Value;

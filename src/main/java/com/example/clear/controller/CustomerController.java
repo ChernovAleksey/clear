@@ -2,7 +2,7 @@ package com.example.clear.controller;
 
 
 import com.example.clear.Dao.CustomerJpaRepository;
-import com.example.clear.EntityNotFoundException;
+import com.example.clear.exeptionHandlers.EntityNotFoundException;
 import com.example.clear.model.DTO.CustomerDtoRequest;
 import com.example.clear.model.DTO.CustomerDtoResponse;
 import com.example.clear.model.DTO.CustomerDtoUpdateRequest;
@@ -15,22 +15,20 @@ import com.example.clear.model.Customer;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.example.clear.PropSource.AGE;
+import static com.example.clear.config.PropSource.AGE;
 
 @RestController
 @RequestMapping("/customers")
@@ -53,12 +51,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerDtoMapperResponse.convertToDto(customerService.getCustomerFullInfo(id)));
     }
     @PostMapping("/")
-    public ResponseEntity<?>  postNewUser(@RequestBody @Valid CustomerDtoRequest customerDtoRequest)
+    public  ResponseEntity<?>  postNewUser(@RequestBody @Valid CustomerDtoRequest customerDtoRequest)
             throws EntityNotFoundException, IllegalAccessException, ParseException {
         Customer customer = customerDtoMapperRequest.convertToEntity(customerDtoRequest);
 
         return customerService.createCustomer(customer, AGE)!= null
-                ? ResponseEntity.ok("Success")
+                ? ResponseEntity.ok(customerService.createCustomer(customer, AGE))
                 : ResponseEntity.badRequest().body("Customer couldn't be registered");
     }
     @PutMapping("/")
@@ -85,8 +83,8 @@ public class CustomerController {
                                                           @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date  to)
             throws EntityNotFoundException, IllegalAccessException{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM d HH:mm:ss zzz uuuu" , Locale.ROOT);
-        LocalDate startDate = LocalDate.parse(from.toString(), formatter);
-        LocalDate endDate = LocalDate.parse(to.toString(), formatter);
+        LocalDate startDate = from.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate endDate = from.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         if(startDate.isAfter(endDate)) {return ResponseEntity.badRequest().body("Date from is after date to!");}
         return ResponseEntity.ok(customerService.getCustomersByBirthdateRange(from,  to).stream()
                 .map(customerDtoMapperResponse::convertToDto)

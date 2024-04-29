@@ -2,28 +2,24 @@ package com.example.clear.service;
 
 import com.example.clear.Dao.CustomerJpaRepository;
 
-import com.example.clear.EntityNotFoundException;
+import com.example.clear.exeptionHandlers.EntityNotFoundException;
 import com.example.clear.model.Customer;
-import jakarta.annotation.PostConstruct;
 
 import jakarta.transaction.Transactional;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
-import java.io.FileReader;
 import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
-import static com.example.clear.PropSource.AGE;
 
 
 @Service
@@ -39,14 +35,15 @@ public class CustomerService {
     return customerJpaRepository.findAll();
   }
 
-  public Customer createCustomer(Customer newCustomer, int counter) throws ParseException, EntityNotFoundException, IllegalAccessException{
+  public Customer createCustomer(Customer newCustomer, Integer counter)
+          throws ParseException, EntityNotFoundException, IllegalAccessException{
     String dataString = ZonedDateTime.parse(newCustomer.getBirthdate().toString(),
             DateTimeFormatter.ofPattern("EEE MMM d HH:mm:ss zzz uuuu", Locale.ROOT)
     ).toString().substring(0, 10);
-    LocalDate startDate = LocalDate.parse(dataString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
+    LocalDate startDate = newCustomer.getBirthdate().toInstant()
+            .atZone(ZoneId.systemDefault())
+            .toLocalDate();
     if (ChronoUnit.YEARS.between(startDate, LocalDate.now()) >= counter) {
-
       return customerJpaRepository.save(newCustomer);
     }
     return null;

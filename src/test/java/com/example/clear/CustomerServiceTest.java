@@ -2,6 +2,7 @@ package com.example.clear;
 
 
 import com.example.clear.Dao.CustomerJpaRepository;
+import com.example.clear.exeptionHandlers.EntityNotFoundException;
 import com.example.clear.model.Customer;
 import com.example.clear.service.CustomerService;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
-import static com.example.clear.PropSource.AGE;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
