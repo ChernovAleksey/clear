@@ -21,7 +21,7 @@ import java.util.Locale;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDtoRequest {
+public class UserDtoRequest {
 
 //    @NotNull
 //    private Long id;

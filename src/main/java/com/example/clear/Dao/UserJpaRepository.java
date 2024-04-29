@@ -1,6 +1,7 @@
 package com.example.clear.Dao;
 
-import com.example.clear.model.Customer;
+
+import com.example.clear.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,10 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CustomerJpaRepository extends JpaRepository<Customer, Long> {
+public interface UserJpaRepository extends JpaRepository<User, Long> {
 
-  @Query("SELECT c FROM Customer c WHERE (c.birthdate >= :from and c.birthdate <=  :to)")
-  List<Customer> getCustomersByBirthdateRange(@Param("from") Date from,
-                                              @Param("to") Date to);
+  @Query("SELECT c FROM User c WHERE (c.birthdate >= :from and c.birthdate <=  :to)")
+  List<User> getCustomersByBirthdateRange(@Param("from") Date from,
+                                          @Param("to") Date to);
 }
 

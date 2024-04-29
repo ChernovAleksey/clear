@@ -1,10 +1,11 @@
 package com.example.clear;
 
 
-import com.example.clear.Dao.CustomerJpaRepository;
+
+import com.example.clear.Dao.UserJpaRepository;
 import com.example.clear.exeptionHandlers.EntityNotFoundException;
-import com.example.clear.model.Customer;
-import com.example.clear.service.CustomerService;
+import com.example.clear.model.User;
+import com.example.clear.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -21,66 +22,66 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class CustomerServiceTest {
+public class UserServiceTest {
 
   @Mock
-  private CustomerJpaRepository customerJpaRepository;
+  private UserJpaRepository customerJpaRepository;
 
 
   @InjectMocks
-  private CustomerService customerService;
+  private UserService customerService;
 
   @Captor
-  private ArgumentCaptor<Customer> customerArgumentCaptor;
+  private ArgumentCaptor<User> customerArgumentCaptor;
 
   @Test
   public void getAllCustomers() {
-    Customer customer = new Customer();
+    User customer = new User();
     when(customerJpaRepository.findAll())
             .thenReturn(List.of(customer));
-    List<Customer> customers = customerService.getAllCustomers();
+    List<User> customers = customerService.getAllCustomers();
 
     assertEquals(customer, customers.get(0));
   }
   @Test
   public void createCustomer() throws ParseException, EntityNotFoundException, IllegalAccessException {
-    Customer customerExpected = new Customer();
+    User customerExpected = new User();
     customerExpected.setStringBirthdate("1999-01-01");
     when(customerJpaRepository.save(customerExpected))
             .thenReturn(customerExpected);
-    Customer customerActual = customerService.createCustomer(customerExpected, 18);
+    User customerActual = customerService.createCustomer(customerExpected, 18);
     assertEquals(customerExpected, customerActual);
 
     verify(customerJpaRepository).save(customerArgumentCaptor.capture());
-    Customer customerActualArgument = customerArgumentCaptor.getValue();
+    User customerActualArgument = customerArgumentCaptor.getValue();
     assertEquals(customerExpected, customerActualArgument);
   }
 
   @Test
   public void updateCustomer() throws ParseException, EntityNotFoundException, IllegalAccessException {
-    Customer customerExpected = new Customer();
+    User customerExpected = new User();
     customerExpected.setId(1L);
     customerExpected.setStringBirthdate("1999-01-01");
     when(customerJpaRepository.save(customerExpected))
             .thenReturn(customerExpected);
-    Customer customerActual = customerService.updateCustomer(customerExpected);
+    User customerActual = customerService.updateCustomer(customerExpected);
     assertEquals(customerExpected, customerActual);
 
     verify(customerJpaRepository).save(customerArgumentCaptor.capture());
-    Customer customerActualArgument = customerArgumentCaptor.getValue();
+    User customerActualArgument = customerArgumentCaptor.getValue();
     assertEquals(customerExpected, customerActualArgument);
   }
 
   @Test
   public void deleteCustomerById() throws ParseException, IllegalAccessException, EntityNotFoundException {
-    Customer customerExpected = new Customer();
+    User customerExpected = new User();
     customerExpected.setStringBirthdate("1999-01-01");
     when(customerJpaRepository.findById(1L))
             .thenReturn(Optional.of(customerExpected));
     customerService.deleteCustomerById(1L);
 
     verify(customerJpaRepository).delete(customerArgumentCaptor.capture());
-    Customer customerActualArgument = customerArgumentCaptor.getValue();
+    User customerActualArgument = customerArgumentCaptor.getValue();
     assertEquals(customerExpected, customerActualArgument);
   }
 }

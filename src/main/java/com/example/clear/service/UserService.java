@@ -1,10 +1,10 @@
 package com.example.clear.service;
 
-import com.example.clear.Dao.CustomerJpaRepository;
 
+
+import com.example.clear.Dao.UserJpaRepository;
 import com.example.clear.exeptionHandlers.EntityNotFoundException;
-import com.example.clear.model.Customer;
-
+import com.example.clear.model.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -25,17 +25,17 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CustomerService {
+public class UserService {
 
-  private final CustomerJpaRepository customerJpaRepository;
+  private final UserJpaRepository customerJpaRepository;
 
 
 
-  public List<Customer> getAllCustomers() {
+  public List<User> getAllCustomers() {
     return customerJpaRepository.findAll();
   }
 
-  public Customer createCustomer(Customer newCustomer, Integer counter)
+  public User createCustomer(User newCustomer, Integer counter)
           throws ParseException, EntityNotFoundException, IllegalAccessException{
     String dataString = ZonedDateTime.parse(newCustomer.getBirthdate().toString(),
             DateTimeFormatter.ofPattern("EEE MMM d HH:mm:ss zzz uuuu", Locale.ROOT)
@@ -49,19 +49,19 @@ public class CustomerService {
     return null;
   }
 
-  public List<Customer> getCustomersByBirthdateRange(Date from, Date to)
+  public List<User> getCustomersByBirthdateRange(Date from, Date to)
           throws EntityNotFoundException, IllegalAccessException{
     return customerJpaRepository.getCustomersByBirthdateRange(from, to);
   }
 
-  public Customer updateCustomer(Customer customer) throws EntityNotFoundException, IllegalAccessException{
+  public User updateCustomer(User customer) throws EntityNotFoundException, IllegalAccessException{
     if (customer.getId() == null) {
       return null;
     }
     return customerJpaRepository.save(customer);
   }
 
-  public Customer getCustomerFullInfo(Long id) throws EntityNotFoundException, IllegalAccessException{
+  public User getCustomerFullInfo(Long id) throws EntityNotFoundException, IllegalAccessException{
     return customerJpaRepository.findById(id).get();
   }
 
@@ -77,7 +77,7 @@ public class CustomerService {
 
   @Transactional
   public void updateFields(Long id, Map<Object, Object> fields) throws EntityNotFoundException, IllegalAccessException {
-    Customer customer = customerJpaRepository.findById(id).get();
+    User customer = customerJpaRepository.findById(id).get();
     if (customer.getId() != null) {
       fields.forEach((key, value) -> {
         if (Objects.equals(key, "birthdate")) {
@@ -85,7 +85,7 @@ public class CustomerService {
           SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
           try {
             Date date = dateFormat.parse(dateString);
-            Field field = ReflectionUtils.findField(Customer.class, (String) key);
+            Field field = ReflectionUtils.findField(User.class, (String) key);
             if (field != null) {
               field.setAccessible(true);
               ReflectionUtils.setField(field, customer, date);
@@ -94,7 +94,7 @@ public class CustomerService {
             e.printStackTrace();
           }
         } else {
-          Field field = ReflectionUtils.findField(Customer.class, (String) key);
+          Field field = ReflectionUtils.findField(User.class, (String) key);
           if (field != null) {
             field.setAccessible(true);
             ReflectionUtils.setField(field, customer, value);

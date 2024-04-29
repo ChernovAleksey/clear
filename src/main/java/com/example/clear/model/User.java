@@ -17,7 +17,7 @@ import java.util.*;
 @Setter
 @NoArgsConstructor
 @ToString
-public class Customer extends AbstractEntity {
+public class User extends AbstractEntity {
     @Column(name = "name")
     private String name;
     @Column(name = "surname")

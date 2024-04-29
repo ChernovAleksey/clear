@@ -1,17 +1,17 @@
 package com.example.clear.controller;
 
 
-import com.example.clear.Dao.CustomerJpaRepository;
-import com.example.clear.exeptionHandlers.EntityNotFoundException;
-import com.example.clear.model.DTO.CustomerDtoRequest;
-import com.example.clear.model.DTO.CustomerDtoResponse;
-import com.example.clear.model.DTO.CustomerDtoUpdateRequest;
-import com.example.clear.model.DTOMapper.CustomerDtoMapperRequest;
-import com.example.clear.model.DTOMapper.CustomerDtoMapperResponse;
-import com.example.clear.model.DTOMapper.CustomerDtoUpdateMapperRequest;
-import com.example.clear.service.CustomerService;
-import com.example.clear.model.Customer;
 
+import com.example.clear.Dao.UserJpaRepository;
+import com.example.clear.exeptionHandlers.EntityNotFoundException;
+import com.example.clear.model.DTO.UserDtoRequest;
+import com.example.clear.model.DTO.UserDtoResponse;
+import com.example.clear.model.DTO.UserDtoUpdateRequest;
+import com.example.clear.model.DTOMapper.UserDtoMapperRequest;
+import com.example.clear.model.DTOMapper.UserDtoMapperResponse;
+import com.example.clear.model.DTOMapper.UserDtoUpdateMapperRequest;
+import com.example.clear.model.User;
+import com.example.clear.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +33,12 @@ import static com.example.clear.config.PropSource.AGE;
 @RestController
 @RequestMapping("/customers")
 @RequiredArgsConstructor
-public class CustomerController {
+public class UserController {
 
-    private final CustomerService customerService;
-    private final CustomerDtoMapperResponse customerDtoMapperResponse;
-    private final CustomerDtoMapperRequest customerDtoMapperRequest;
-    private final CustomerDtoUpdateMapperRequest customerDtoUpdateMapperRequest;
+    private final UserService customerService;
+    private final UserDtoMapperResponse customerDtoMapperResponse;
+    private final UserDtoMapperRequest customerDtoMapperRequest;
+    private final UserDtoUpdateMapperRequest customerDtoUpdateMapperRequest;
 
     @GetMapping("/")
     public ResponseEntity<?> getAllUsers() {
@@ -51,18 +51,18 @@ public class CustomerController {
         return ResponseEntity.ok(customerDtoMapperResponse.convertToDto(customerService.getCustomerFullInfo(id)));
     }
     @PostMapping("/")
-    public  ResponseEntity<?>  postNewUser(@RequestBody @Valid CustomerDtoRequest customerDtoRequest)
+    public  ResponseEntity<?>  postNewUser(@RequestBody @Valid UserDtoRequest customerDtoRequest)
             throws EntityNotFoundException, IllegalAccessException, ParseException {
-        Customer customer = customerDtoMapperRequest.convertToEntity(customerDtoRequest);
+        User customer = customerDtoMapperRequest.convertToEntity(customerDtoRequest);
 
         return customerService.createCustomer(customer, AGE)!= null
                 ? ResponseEntity.ok(customerService.createCustomer(customer, AGE))
                 : ResponseEntity.badRequest().body("Customer couldn't be registered");
     }
     @PutMapping("/")
-    public CustomerDtoResponse updateUser(@RequestBody @Valid CustomerDtoUpdateRequest customerDtoUpdateRequest)
+    public UserDtoResponse updateUser(@RequestBody @Valid UserDtoUpdateRequest customerDtoUpdateRequest)
             throws EntityNotFoundException, IllegalAccessException{
-        Customer customer = customerDtoUpdateMapperRequest.convertToEntity(customerDtoUpdateRequest);
+        User customer = customerDtoUpdateMapperRequest.convertToEntity(customerDtoUpdateRequest);
         return customerDtoMapperResponse.convertToDto(customerService.updateCustomer(customer));
     }
 
@@ -77,14 +77,16 @@ public class CustomerController {
             throws EntityNotFoundException, IllegalAccessException{
         return customerService.deleteCustomerById(id) ? ResponseEntity.ok("Success") : ResponseEntity.badRequest().body("Customer not found");
     }
-    private final CustomerJpaRepository customerJpaRepository ;
+    private final UserJpaRepository customerJpaRepository ;
     @GetMapping("/search/{from}/{to}")
     public ResponseEntity<?> getCustomersByBirthdateRange(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
                                                           @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date  to)
             throws EntityNotFoundException, IllegalAccessException{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM d HH:mm:ss zzz uuuu" , Locale.ROOT);
         LocalDate startDate = from.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate endDate = from.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println(startDate);
+        LocalDate endDate = to.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        System.out.println(endDate);
         if(startDate.isAfter(endDate)) {return ResponseEntity.badRequest().body("Date from is after date to!");}
         return ResponseEntity.ok(customerService.getCustomersByBirthdateRange(from,  to).stream()
                 .map(customerDtoMapperResponse::convertToDto)

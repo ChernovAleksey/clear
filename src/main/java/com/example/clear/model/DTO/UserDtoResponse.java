@@ -17,7 +17,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDtoResponse {
+public class UserDtoResponse {
 
     private Long id;
     private String name;

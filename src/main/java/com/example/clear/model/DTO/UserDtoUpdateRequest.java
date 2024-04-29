@@ -16,7 +16,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerDtoUpdateRequest {
+public class UserDtoUpdateRequest {
 
     @NotNull
     private Long id;

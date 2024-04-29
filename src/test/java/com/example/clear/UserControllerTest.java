@@ -1,15 +1,15 @@
 package com.example.clear;
 
 
-import com.example.clear.Dao.CustomerJpaRepository;
-import com.example.clear.controller.CustomerController;
-import com.example.clear.model.Customer;
-import com.example.clear.model.DTO.CustomerDtoRequest;
-import com.example.clear.model.DTO.CustomerDtoResponse;
-import com.example.clear.model.DTOMapper.CustomerDtoMapperRequest;
-import com.example.clear.model.DTOMapper.CustomerDtoMapperResponse;
-import com.example.clear.model.DTOMapper.CustomerDtoUpdateMapperRequest;
-import com.example.clear.service.CustomerService;
+
+import com.example.clear.Dao.UserJpaRepository;
+import com.example.clear.controller.UserController;
+import com.example.clear.model.DTO.UserDtoResponse;
+import com.example.clear.model.DTOMapper.UserDtoMapperRequest;
+import com.example.clear.model.DTOMapper.UserDtoMapperResponse;
+import com.example.clear.model.DTOMapper.UserDtoUpdateMapperRequest;
+import com.example.clear.model.User;
+import com.example.clear.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,46 +30,46 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(CustomerController.class)
-public class CustomerControllerTest {
+@WebMvcTest(UserController.class)
+public class UserControllerTest {
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
-  private CustomerService customerService;
+  private UserService customerService;
 
 
   @MockBean
-  private CustomerJpaRepository customerJpaRepository;
+  private UserJpaRepository customerJpaRepository;
   @MockBean
-  private CustomerDtoUpdateMapperRequest customerDtoUpdateMapperRequest;
+  private UserDtoUpdateMapperRequest customerDtoUpdateMapperRequest;
   @MockBean
-  private CustomerDtoMapperResponse customerDtoMapperResponse;
+  private UserDtoMapperResponse customerDtoMapperResponse;
   @MockBean
-  private CustomerDtoMapperRequest customerDtoMapperRequest;
+  private UserDtoMapperRequest customerDtoMapperRequest;
 
   @TestConfiguration
   static class TestConfig{
     @Bean
-    public CustomerDtoMapperResponse customerDtoMapperResponse(){
-      return new CustomerDtoMapperResponse();
+    public UserDtoMapperResponse customerDtoMapperResponse(){
+      return new UserDtoMapperResponse();
     }
     @Bean
-    public CustomerDtoMapperRequest customerDtoMapperRequest(){
-      return new CustomerDtoMapperRequest();
+    public UserDtoMapperRequest customerDtoMapperRequest(){
+      return new UserDtoMapperRequest();
     }
     @Bean
-    public CustomerDtoUpdateMapperRequest customerDtoUpdateMapperRequest(){
-      return new CustomerDtoUpdateMapperRequest();
+    public UserDtoUpdateMapperRequest customerDtoUpdateMapperRequest(){
+      return new UserDtoUpdateMapperRequest();
     }
 
   }
 
   @Test
   public void getAllUsers() throws Exception {
-    Customer customer = new Customer();
+    User customer = new User();
 
-    CustomerDtoResponse customerDto = new CustomerDtoResponse();
+    UserDtoResponse customerDto = new UserDtoResponse();
     customerDto.setId(42L);
     customerDto.setName("Kris");
     customerDto.setSurname("Kris");
@@ -86,9 +86,9 @@ public class CustomerControllerTest {
   }
 @Test
 public void getUserFullInfoTest() throws Exception {
-  Customer customer = new Customer();
+  User customer = new User();
 
-  CustomerDtoResponse customerDto = new CustomerDtoResponse();
+  UserDtoResponse customerDto = new UserDtoResponse();
   customerDto.setId(1L);
   customerDto.setName("Kris");
   customerDto.setSurname("Kris");
@@ -107,7 +107,7 @@ public void getUserFullInfoTest() throws Exception {
 }
   @Test
   public void deleteCustomer() throws Exception {
-    Customer customer= new Customer();
+    User customer= new User();
     customer.setId(1L);
     customer.setName("Kris");
     customer.setSurname("Kris");
