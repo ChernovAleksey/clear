@@ -79,7 +79,7 @@ public class UserControllerTest {
     when(customerService.getAllCustomers()).thenReturn(List.of(customer));
     when(customerDtoMapperResponse.convertToDto(customer)).thenReturn(customerDto);
 
-    this.mockMvc.perform(MockMvcRequestBuilders.get("/customers/").contentType("application/json"))
+    this.mockMvc.perform(MockMvcRequestBuilders.get("/users/").contentType("application/json"))
             .andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].id", Matchers.is(42)))
             .andExpect(MockMvcResultMatchers.jsonPath("$[0].name", Matchers.is("Kris")));
@@ -99,7 +99,7 @@ public void getUserFullInfoTest() throws Exception {
           .thenReturn(customer);
 
   when(customerDtoMapperResponse.convertToDto(customer)).thenReturn(customerDto);
-  this.mockMvc.perform(MockMvcRequestBuilders.get("/customers/1")
+  this.mockMvc.perform(MockMvcRequestBuilders.get("/users/1")
                   .contentType("application/json"))
           .andExpect(status().isOk())
           .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.is(1)))
@@ -117,7 +117,7 @@ public void getUserFullInfoTest() throws Exception {
     when(customerService.deleteCustomerById(1L)).thenReturn(true);
 
 
-    this.mockMvc.perform(MockMvcRequestBuilders.delete("/customers/1")
+    this.mockMvc.perform(MockMvcRequestBuilders.delete("/users/1")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk());
   }

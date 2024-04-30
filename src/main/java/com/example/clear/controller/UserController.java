@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 import static com.example.clear.config.PropSource.AGE;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
 
